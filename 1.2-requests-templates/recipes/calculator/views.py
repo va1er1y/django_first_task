@@ -19,54 +19,15 @@ DATA = {
     # можете добавить свои рецепты ;)
 }
 
-def omlet(request):
-    quanity = int(request.GET.get('servings', 1))
+def change_recept(request, recept):
+    servings = request.GET.get('servings')
     prelimary_recept = dict()
-    prelimary_recept.clear()
-    prelimary_recept['recipe'] = DATA.get('omlet').copy()
-    if quanity == 1:
-        context = prelimary_recept
-
-    else:
+    prelimary_recept['recipe'] = DATA.get(recept).copy()
+    if servings:
+        quanity = int(servings)
         for key, value in prelimary_recept['recipe'].items():
             prelimary_recept['recipe'][key] = value * quanity
         context = prelimary_recept
-        print(context)
-        print(prelimary_recept)
-    return render(request, 'calculator/index.html', context)
-
-def pasta(request):
-    quanity = int(request.GET.get('servings', 1))
-    prelimary_recept = dict()
-    prelimary_recept['recipe'] = DATA.get('pasta').copy()
-    if quanity == 1:
-        context = prelimary_recept.copy()
-
     else:
-        for key, value in prelimary_recept['recipe'].items():
-            prelimary_recept['recipe'][key] = value * quanity
-        context = prelimary_recept.copy()
+        context = prelimary_recept
     return render(request, 'calculator/index.html', context)
-
-def buter(request):
-    quanity = int(request.GET.get('servings', 1))
-    prelimary_recept = dict()
-    prelimary_recept['recipe'] = DATA.get('buter').copy()
-    if quanity == 1:
-        context = prelimary_recept.copy()
-
-    else:
-        for key, value in prelimary_recept['recipe'].items():
-            prelimary_recept['recipe'][key] = value * quanity
-        context = prelimary_recept.copy()
-    return render(request, 'calculator/index.html', context)
-
-# Напишите ваш обработчик. Используйте DATA как источник данных
-# Результат - render(request, 'calculator/index.html', context)
-# В качестве контекста должен быть передан словарь с рецептом:
-# context = {
-#   'recipe': {
-#     'ингредиент1': количество1,
-#     'ингредиент2': количество2,
-#   }
-# }
