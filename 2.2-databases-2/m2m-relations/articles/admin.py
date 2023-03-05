@@ -4,13 +4,18 @@ from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
 
 class ScopeInlineFormset(BaseInlineFormSet):
-    def formset(self):
+    def clean(self):
+        i = 0
         for form in self.forms:
-            form.cleaned_data
-            raise ValidationError('Тут всегда ошибка')
-        return super().formset()
-
-
+            if form.cleaned_data.get('is_main'):
+                i += 1
+            else:
+                continue
+        if i == 0:
+            raise ValidationError('Выберите главную тему')
+        elif i > 1:
+            raise ValidationError('Главной темой может быть только одна')
+        return super().clean()
 class ScopeInline(admin.TabularInline):
     model = Scope
     extre = 0

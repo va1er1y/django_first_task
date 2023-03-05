@@ -16,10 +16,19 @@ class Article(models.Model):
         return self.title
 
 class Tag(models.Model):
-    name = models.CharField( max_length=128)
+    name = models.CharField(max_length=128)
     articles = models.ManyToManyField(Article, through='Scope', related_name = 'tags')
 
 class Scope(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='scopes')
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE,  related_name='scopes')
-    is_main = models.BooleanField()
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    is_main = models.BooleanField(default=False)
+
+    def str(self):
+        return self.article.title + " " + self.tag.name
+
+    class Meta:
+        verbose_name = 'Связь'
+        verbose_name_plural = 'Связи'
+        ordering = ['-is_main', 'tag__name']
+
